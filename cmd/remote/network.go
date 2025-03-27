@@ -55,9 +55,9 @@ type Network struct {
 func NewNetwork(chainID string) (*Network, error) {
 	codec := encoding.MakeConfig(app.ModuleEncodingRegisters...)
 	blobParams := blobtypes.DefaultParams()
-	blobParams.GovMaxSquareSize = 256
+	blobParams.GovMaxSquareSize = 512
 	cparams := app.DefaultConsensusParams()
-	cparams.Block.MaxBytes = 35_000_000
+	cparams.Block.MaxBytes = 129_999_000
 
 	g := genesis.NewDefaultGenesis().
 		WithChainID(chainID).
@@ -290,6 +290,7 @@ func (n *Network) SaveAddressBook(payloadRoot string, peers []string) error {
 
 func MakeConfig(name string, opts ...Option) (*config.Config, error) {
 	cfg := config.DefaultConfig()
+	// cfg.DBBackend = "pebbledb"
 	cfg.Moniker = name
 	cfg.RPC.ListenAddress = "tcp://0.0.0.0:26657"
 	// cfg.P2P.ExternalAddress = fmt.Sprintf("tcp://%v", node.AddressP2P(false))
@@ -308,27 +309,29 @@ func MakeConfig(name string, opts ...Option) (*config.Config, error) {
 	cfg.Mempool.TTLDuration = 0
 	cfg.Mempool.MaxGossipDelay = 60 * time.Second
 	cfg.TxIndex.Indexer = "null"
-	cfg.P2P.MaxNumInboundPeers = 15
-	cfg.P2P.MaxNumOutboundPeers = 12
+	cfg.P2P.MaxNumInboundPeers = 20
+	cfg.P2P.MaxNumOutboundPeers = 20
 	cfg.P2P.MaxPacketMsgPayloadSize = 1_000_000_000
 	cfg.P2P.PexReactor = true
-	cfg.P2P.RecvRate = 2_000_120_000 // increase on a whim to limit peer disconnections
-	cfg.P2P.SendRate = 1_000_120_000
+	cfg.P2P.RecvRate = 200_120_000 // increase on a whim to limit peer disconnections
+	cfg.P2P.SendRate = 100_120_000
 	// cfg.Consensus.PeerGossipSleepDuration = time.Millisecond * 75
 	cfg.RPC.MaxBodyBytes = 1_000_000_000
 	cfg.RPC.MaxOpenConnections = 1000
 	cfg.RPC.TimeoutBroadcastTxCommit = 120 * time.Second
 	cfg.RPC.MaxSubscriptionClients = 1000
 	cfg.RPC.ListenAddress = "tcp://0.0.0.0:26657"
-	cfg.Consensus.TimeoutPropose = time.Millisecond * 4000
-	cfg.Consensus.TimeoutCommit = time.Millisecond * 3800
+	cfg.Consensus.TimeoutPropose = time.Millisecond * 10000
+	cfg.Consensus.TimeoutCommit = time.Millisecond * 1500
 	cfg.Consensus.OnlyInternalWal = true
 	cfg.Instrumentation.TraceBufferSize = 6000
 	cfg.Instrumentation.TraceType = "local"
 	cfg.FastSyncMode = true
-	cfg.Instrumentation.TracingTables = "consensus_round_state,consensus_block_parts,bp_state,consensus_block,consensus_proposal,peers,notes"
+	cfg.Instrumentation.TracingTables = "consensus_round_state,consensus_block,peers,mem_stats"
+	cfg.Instrumentation.PyroscopeTrace = false
+	cfg.Instrumentation.PyroscopeURL = "http://159.65.233.61:4040/"
 	// all tracing tables
-	// cfg.Instrumentation.TracingTables = "mempool_tx,mempool_peer_state,consensus_round_state,consensus_block_parts,bp_state,consensus_block,consensus_vote,consensus_state,consensus_proposal,peers,pending_bytes,received_bytes,abci"
+	// cfg.Instrumentation.TracingTables = "recovered,mem_stats,mempool_tx,mempool_peer_state,consensus_round_state,consensus_block_parts,bp_state,consensus_block,consensus_vote,consensus_state,consensus_proposal,peers,pending_bytes,received_bytes,abci"
 	// cfg.Instrumentation.PyroscopeTrace = true
 	// cfg.Instrumentation.PyroscopeURL = "http://104.131.65.193:4040/"
 	for _, opt := range opts {

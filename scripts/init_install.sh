@@ -1,9 +1,8 @@
 #!/bin/bash
 
-CELESTIA_APP_COMMIT="c53ee35822cafa8eef14a590198d2dc7a4f0d816"
+CELESTIA_APP_COMMIT="v3.4.1"
 CELES_HOME=".celestia-app"
-MONIKER="validator"
-ARCHIVE_NAME="payload.tar.gz"
+MONIKER="taco"
 
 export DEBIAN_FRONTEND=noninteractive 
 
@@ -16,15 +15,13 @@ export DEBIAN_FRONTEND=noninteractive
 apt-get update -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 apt-get install git build-essential ufw curl jq chrony snapd --yes -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold"
 
-ufw allow 26657/tcp
+# ufw allow 26657/tcp
 ufw allow 26656/tcp
-ufw allow 26657/udp
+# ufw allow 26657/udp
 ufw allow 26656/udp
 
 systemctl enable chrony
 systemctl start chrony
-
-export GOOGLE_APPLICATION_CREDENTIALS="/root/payload/congest-remote-key-gbq.json"
 
 # Ensure the script is run as root
 if [ "$(id -u)" -ne 0 ]; then
@@ -128,19 +125,21 @@ source payload/txsim.sh
 HOSTNAME=$(hostname)
 
 # Base command
-COMMAND="celestia-appd start --force-no-bbr"
+COMMAND="celestia-appd start"
 
 # Define log file path
 LOG_FILE="/root/logs"
 
-Check if the hostname matches the specific value
-if [[ "$HOSTNAME" == "validator-2" ]]; then
-    # If it matches, don't add the log level flag
-    echo "Starting celestia-appd without log level flag on $HOSTNAME"
-else
-    Otherwise, add the log level flag
-    COMMAND+=" --log_level=\"error\""
-fi
+# Check if the hostname matches the specific value
+# if [[ "$HOSTNAME" == "validator-2" ]]; then
+#     # If it matches, don't add the log level flag
+#     echo "Starting celestia-appd without log level flag on $HOSTNAME"
+# else
+#     Otherwise, add the log level flag
+#     COMMAND+=" --log_level=\"error\""
+# fi
 
 # Execute the command and redirect output to the log file
-eval $COMMAND 2>&1 | tee -a "$LOG_FILE"
+# eval $COMMAND 2>&1 | tee -a "$LOG_FILE"
+
+celestia-appd start

@@ -129,12 +129,19 @@ celestia-appd config chain-id $CHAIN_ID
 celestia-appd init --chain-id=$CHAIN_ID --home $CELES_HOME $MONIKER
 
 
-
 # Get the hostname
 hostname=$(hostname)
 
+ALLOWED_HOSTS=("validator-1" "validator-2" "validator-3" "validator-4") 
+
 # Parse the first part of the hostname
 parsed_hostname=$(echo $hostname | awk -F'-' '{print $1 "-" $2}')
+
+if [[ " ${ALLOWED_HOSTS[@]} " =~ " ${parsed_hostname} " ]]; then
+  sed -i 's/^pyroscope_trace *= *false/pyroscope_trace = true/' payload/$parsed_hostname/config.toml
+else
+  echo "Host $HOSTNAME not in allowed list. Skipping update."
+fi
 
 mv payload/$parsed_hostname/node_key.json $HOME/$CELES_HOME/config/node_key.json
 
@@ -159,7 +166,7 @@ source payload/txsim.sh
 HOSTNAME=$(hostname)
 
 # Base command
-COMMAND="celestia-appd start --log_level=\"error\""
+COMMAND="celestia-appd start"
 
 # Define log file path
 LOG_FILE="/root/logs"

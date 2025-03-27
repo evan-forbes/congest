@@ -16,7 +16,7 @@ DROPLET_IPS=$(echo "$STACK_OUTPUT" | jq -r '.[]')
 # Variables
 USER="root"
 TMUX_SESSION_NAME="txsim"
-COMMAND="txsim .celestia-app/keyring-test --blob 1 --blob-amounts 1 --blob-sizes 500000-1000001 --key-path .celestia-app --grpc-endpoint localhost:9090 --feegrant"
+COMMAND="txsim .celestia-app/keyring-test --blob 6 --blob-amounts 1 --blob-sizes 1900000-2000000 --key-path .celestia-app --grpc-endpoint localhost:9090 --feegrant"
 # COMMAND="tmux send-keys -t app 'export SEEN_LIMIT=83' C-m"
 
 # Function to start tmux session on a remote server
@@ -58,3 +58,9 @@ done
 
 # Wait for all background processes to finish
 wait
+
+txsim validator-1/keyring-test --blob 50 --blob-amounts 1 --blob-sizes 1900000-2000001 --key-path validator-1 --grpc-endpoint plaintext://grpc.ams.mammochain.com:9090 --feegrant
+
+txsim validator-1/keyring-test --blob 50 --blob-amounts 1 --blob-sizes 1900000-2000001 --key-path validator-1 --grpc-endpoint plaintext://grpc.waw.mammochain.com:9090 --feegrant
+
+txsim validator-1/keyring-test --blob 50 --blob-amounts 1 --blob-sizes 1900000-2000001 --key-path validator-1 --grpc-endpoint plaintext://grpc.par.mammochain.com:9090 --feegrant

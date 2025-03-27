@@ -15,7 +15,7 @@ echo "CHAIN_ID after sourcing vars.sh: $CHAIN_ID"
 PROJECT_ID="numeric-mile-433416-e9"
 DATASET_ID="traces"
 
-CHAIN_ID="epbbt-8"
+CHAIN_ID="recovery-23"
 
 LOCAL_DIR="/root/.celestia-app/data/traces"
 
@@ -50,4 +50,3 @@ base_s3_path="s3://${S3_BUCKET_NAME}/${CHAIN_ID}/${nodeID}/"
 # Upload the directory structure to S3
 aws s3 cp "$source_dir" "$base_s3_path" --recursive --region $AWS_DEFAULT_REGION
 aws s3 cp "$logs_path" "$base_s3_path" --region $AWS_DEFAULT_REGION
-
