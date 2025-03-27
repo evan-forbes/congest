@@ -249,12 +249,12 @@ require (
 replace (
 	//v1.39.0-tm-v0.34.29
 	github.com/btcsuite/btcd/btcec/v2 => github.com/btcsuite/btcd/btcec/v2 v2.3.4
-	github.com/celestiaorg/celestia-app => /home/evan/go/src/github.com/celestiaorg/celestia-app
+	github.com/celestiaorg/celestia-app => github.com/celestiaorg/celestia-app // @rach-id you'll likely want to bump this to something local, although it shouldn't matter too much since this is only used to generate the configs etc
 	github.com/cosmos/cosmos-sdk => github.com/celestiaorg/cosmos-sdk v1.27.0-sdk-v0.46.16
 	// Pin to ledger-cosmos-go v0.12.4 to avoid a breaking change introduced in v0.13.0
 	// The following replace statement can be removed when we upgrade to cosmos-sdk >= v0.50.0
 	github.com/cosmos/ledger-cosmos-go => github.com/cosmos/ledger-cosmos-go v0.12.4
 	github.com/gogo/protobuf => github.com/regen-network/protobuf v1.3.3-alpha.regen.1
 	github.com/syndtr/goleveldb => github.com/syndtr/goleveldb v1.0.1-0.20210819022825-2ae1ddf74ef7
-	github.com/tendermint/tendermint => /home/evan/go/src/github.com/celestiaorg/celestia-core // v1.43.0-tm-v0.34.35.0.20241204210733-a74e91329d9d
+	github.com/tendermint/tendermint => github.com/celestiaorg/celestia-core 14bacd7dae4e9e7e7ed69cd3972e98f36fe41673 // @rach-id you'll likely want to bump this to something local, although it shouldn't matter too much since this is only used to generate the configs etc
 )
